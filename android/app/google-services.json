@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "639446248573",
+    "project_id": "deobfuscate-5f646",
+    "storage_bucket": "deobfuscate-5f646.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:639446248573:android:740cac7296d9d738ed5514",
+        "android_client_info": {
+          "package_name": "com.example.deobfuscate"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLJ-AaffHH_NoEJX5VloMncUhRJruHcWc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
