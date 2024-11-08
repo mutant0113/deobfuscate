@@ -1,17 +1,10 @@
 # deobfuscate
 
-A new Flutter project.
+A new Flutter project for testing deobfuscation on Firebase crashlytics console.
 
 ## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-# deobfuscate
+1. flutter build apk --release --split-debug-info=build/symbols --obfuscate
+2. firebase crashlytics:symbols:upload --app=1:639446248573:android:740cac7296d9d738ed5514 ./build/symbols
+3. adb install your/path/to/deobfuscate/build/app/outputs/flutter-apk/app-release.apk
+4. Tap all buttons on the app to generate some exceptions
+5. Check Firebase crashlytics console
