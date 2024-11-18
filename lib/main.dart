@@ -3,33 +3,31 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-Future<void> main() async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(const MyApp());
+  // Pass all uncaught "fatal" errors from the framework to Crashlytics
+  // FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+  runApp(
+    const MaterialApp(
+      home: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+    return const MaterialApp(
+      home: MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
+  const MyHomePage({super.key});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -39,51 +37,44 @@ class _MyHomePageState extends State<MyHomePage> {
   static const platform = MethodChannel('com.example.deobfuscate/channel');
 
   @override
-  Widget build(BuildContext context) =>
-      Scaffold(
-        appBar: AppBar(
-          backgroundColor: Theme
-              .of(context)
-              .colorScheme
-              .inversePrimary,
-          title: Text(widget.title),
-        ),
-        body: Column(
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Column(
           children: [
-            Center(
-              child: ElevatedButton(
-                onPressed: () async {
-                  try {
-                    final result = await platform.invokeMethod('getNativeMessage');
-                    print('Native message: $result');
-                  } catch (exception, stacktrace) {
-                    print('Failed to get native message: $exception');
-                    FirebaseCrashlytics.instance.recordError(exception, stacktrace);
-                  }
-                },
-                child: const Text('Get Native Message'),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.lightBlue, // foreground
               ),
+              onPressed: () async {
+                try {
+                  final result = await platform.invokeMethod('getNativeMessage');
+                  print('Native message: $result');
+                } catch (exception, stacktrace) {
+                  print('Failed to get native message: $exception');
+                  FirebaseCrashlytics.instance.recordError(exception, stacktrace);
+                }
+              },
+              child: const Text('Native crash 4'),
             ),
-            Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  try {
-                    throw Exception('This is a flutter exception');
-                  } catch (exception, stackTrace) {
-                    print('Failed to get flutter exception: $exception, $stackTrace');
-                    FirebaseCrashlytics.instance.recordError(exception, stackTrace);
-                  }
-                },
-                child: const Text('Get flutter exception'),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.lightBlue, // foreground
               ),
-            ),
-            Center(
-              child: ElevatedButton(
-                onPressed: () => FirebaseCrashlytics.instance.crash(),
-                child: const Text('Force a crash'),
-              ),
+              onPressed: () {
+                try {
+                  throw Exception('Fatal Crash 7');
+                } catch (exception, stacktrace) {
+                  FirebaseCrashlytics.instance.recordError(exception, stacktrace);
+                }
+              },
+              child: const Text('Fatal crash 7'),
             ),
           ],
         ),
-      );
+      ),
+    );
+  }
 }
